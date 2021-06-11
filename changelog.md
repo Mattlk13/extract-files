@@ -1,5 +1,133 @@
 # extract-files changelog
 
+## Next
+
+### Patch
+
+- Amended the changelog entry for v10.0.0.
+
+## 11.0.0
+
+### Major
+
+- The function `extractFiles` now deeply clones an input value containing multiple references of an object or array with a mirrored reference structure instead of creating multiple objects or arrays. This change shouldn’t affect typical `JSON.stringify` use with cloned values.
+- The function `extractFiles` now uses `for…of` to iterate `FileList` instances.
+
+### Patch
+
+- Updated dev dependencies.
+- Reverted the more specific package `main` field path.
+- The function `extractFiles` now correctly handles circular references within the input value by recreating the circular references in the returned clone instead of infinitely recursing to the point of a `Maximum call stack size exceeded` error, fixing [#14](https://github.com/jaydenseric/extract-files/issues/14).
+- Renamed imports in the test index module.
+- Refactored `extractFiles` tests to use `Object.freeze` with input objects and arrays to ensure input isn’t mutated.
+- Updated a code example to use a deep import.
+- Amended the changelog entries for v8.0.0 and v9.0.0.
+
+## 10.0.0
+
+### Major
+
+- Updated Node.js support to `^12.20 || >= 14.13`.
+- Stopped supporting Internet Explorer.
+- Updated dev dependencies, some of which require newer Node.js versions than previously supported.
+- Replaced the the `package.json` `exports` field public [subpath folder mapping](https://nodejs.org/api/packages.html#packages_subpath_folder_mappings) (deprecated by Node.js) with a [subpath pattern](https://nodejs.org/api/packages.html#packages_subpath_patterns), fixing [#17](https://github.com/jaydenseric/extract-files/issues/17). Deep `require` paths within `extract-files/public/` must now include the `.js` file extension.
+- Removed Babel related dev dependencies, config, and scripts. Published modules now contain more modern ES syntax.
+- Published modules now contain JSDoc comments, which might affect TypeScript projects.
+- The tests are now ESM in `.mjs` files instead of CJS in `.js` files.
+
+### Patch
+
+- Stop using [`hard-rejection`](https://npm.im/hard-rejection) to detect unhandled `Promise` rejections in tests, as Node.js v15+ does this natively.
+- Used [`revertable-globals`](https://npm.im/revertable-globals) to define globals per-test.
+- Test the bundle size manually using [`esbuild`](https://npm.im/esbuild) and [`gzip-size`](https://npm.im/gzip-size), removing [`size-limit`](https://npm.im/size-limit) related dev dependencies, config, and scripts.
+- Removed `npm-debug.log` from the `.gitignore` file as npm [v4.2.0](https://github.com/npm/npm/releases/tag/v4.2.0)+ doesn’t create it in the current working directory.
+- Fixed a test of `extractFiles` with an `undefined` value.
+- Updated GitHub Actions CI config:
+  - Run tests with Node.js v12, v14, v16.
+  - Updated `actions/checkout` to v2.
+  - Updated `actions/setup-node` to v2.
+  - Don’t specify the `CI` environment variable as it’s set by default.
+- More specific package `main` field path.
+- Simplified JSDoc related package scripts now that [`jsdoc-md`](https://npm.im/jsdoc-md) v10 automatically generates a Prettier formatted readme.
+- Added a package `test:jsdoc` script that checks the readme API docs are up to date with the source JSDoc.
+- Use the `.js` file extension in internal `require` paths.
+- Improved documentation.
+- The file `changelog.md` is no longer published.
+- Updated URLs in the changelog entries for v3.1.0 and v5.0.1.
+
+## 9.0.0
+
+### Major
+
+- Updated Node.js support to `^10.17.0 || ^12.0.0 || >= 13.7.0`.
+- Updated dev dependencies, some of which require newer Node.js versions than previously supported.
+- Renamed the `lib` directory to `public`; existing deep import or require paths must be updated.
+- Removed the package `module` field.
+
+### Patch
+
+- Removed Node.js v13 and added v14 to the versions tested in GitHub Actions.
+- Simplified the GitHub Actions CI config with the [`npm install-test`](https://docs.npmjs.com/cli/v7/commands/npm-install-test) command.
+- Improved JSDoc code examples.
+- Updated EditorConfig.
+- No longer transpile tests with Babel, or test ESM.
+- Simplified the Babel config and scripts, ensuring `.js` files are parsed as scripts.
+- Removed unnecessary `.js` file extensions from `require` paths.
+- Documented all the ways to `import` and `require` the public API.
+- Tweaked the readme setup instructions.
+
+## 8.1.0
+
+### Minor
+
+- Updated the package `exports` field:
+
+  - Deep imports to specific files are now allowed, e.g.
+
+    ```js
+    import extractFiles from 'extract-files/lib/extractFiles.js';
+    ```
+
+    ```js
+    const extractFiles = require('extract-files/lib/extractFiles');
+    ```
+
+  - The `package.json` can now be required, e.g.
+
+    ```js
+    const pkg = require('extract-files/package.json');
+    ```
+
+    ```js
+    // With Node.js --experimental-json-modules flag.
+    import pkg from 'extract-files/package.json';
+    ```
+
+### Patch
+
+- Updated dev dependencies.
+- Updated the package `engines.node` field to `10 - 12 || >= 13.7` to reflect the package `exports` related breaking changes in `extract-files@8.0.0`.
+- Improved the package `prepare:prettier` and `test:prettier` scripts.
+- Reordered the package `test:eslint` script args for consistency with `test:prettier`.
+- Configured Prettier option `semi` to the default, `true`.
+- Restructured the `src` directory so `lib` and `test` files are separate with their own `.babelrc.js` files.
+
+## 8.0.0
+
+### Major
+
+- Added a [package `exports` field](https://nodejs.org/api/packages.html#packages_exports) to support native ESM in Node.js.
+- Some source and published files are now `.js` (CJS) instead of `.mjs` (ESM), so undocumented deep imports may no longer work. [This approach avoids the dual package hazard](https://nodejs.org/api/packages.html#packages_approach_1_use_an_es_module_wrapper).
+
+### Patch
+
+- Updated dependencies.
+- Removed [`@babel/plugin-proposal-class-properties`](https://npm.im/@babel/plugin-proposal-class-properties) from dev dependencies and the Babel config.
+- Lint fixes for [`prettier`](https://npm.im/prettier) v2.
+- Ensure GitHub Actions run on pull request.
+- Improved the `ExtractableFileMatcher` JSDoc typedef.
+- Size limit test the published CJS files as well as the ESM.
+
 ## 7.0.0
 
 ### Major
@@ -56,7 +184,7 @@
 ### Patch
 
 - Updated dev dependencies.
-- Instance (e.g. [`new Date()`](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date)) references are copied to the clone instead of recursed as objects; fixing [jaydenseric/apollo-upload-client#138](https://github.com/jaydenseric/apollo-upload-client/issues/138) via [#9](https://github.com/jaydenseric/extract-files/pull/9).
+- Instance (e.g. [`new Date()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date)) references are copied to the clone instead of recursed as objects; fixing [jaydenseric/apollo-upload-client#138](https://github.com/jaydenseric/apollo-upload-client/issues/138) via [#9](https://github.com/jaydenseric/extract-files/pull/9).
 - Test more types of input.
 
 ## 5.0.0
@@ -134,7 +262,7 @@
 
 ### Minor
 
-- Added support for [`Blob`](https://developer.mozilla.org/en/docs/Web/API/Blob) types, via [#5](https://github.com/jaydenseric/extract-files/pull/5).
+- Added support for [`Blob`](https://developer.mozilla.org/en-US/docs/Web/API/Blob) types, via [#5](https://github.com/jaydenseric/extract-files/pull/5).
 
 ### Patch
 

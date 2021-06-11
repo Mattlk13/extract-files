@@ -1,6 +1,8 @@
-export { extractFiles } from './extractFiles.mjs'
-export { ReactNativeFile } from './ReactNativeFile.mjs'
-export { isExtractableFile } from './isExtractableFile.mjs'
+'use strict';
+
+exports.ReactNativeFile = require('./ReactNativeFile.js');
+exports.extractFiles = require('./extractFiles.js');
+exports.isExtractableFile = require('./isExtractableFile.js');
 
 /**
  * An extractable file.
@@ -10,20 +12,21 @@ export { isExtractableFile } from './isExtractableFile.mjs'
  */
 
 /**
- * A function that checks if a value is an extractable file.
+ * A function that checks if a value is an
+ * [extractable file]{@link ExtractableFile}.
  * @kind typedef
  * @name ExtractableFileMatcher
  * @type {Function}
  * @param {*} value Value to check.
- * @returns {boolean} Is the value an extractable file.
+ * @returns {boolean} Is the value an [extractable file]{@link ExtractableFile}.
  * @see [`isExtractableFile`]{@link isExtractableFile} is the default extractable file matcher.
  * @example <caption>How to check for the default exactable files, as well as a custom type of file.</caption>
  * ```js
- * import { isExtractableFile } from 'extract-files'
+ * import isExtractableFile from 'extract-files/public/isExtractableFile.js';
  *
- * const isExtractableFileEnhanced = value =>
+ * const isExtractableFileEnhanced = (value) =>
  *   isExtractableFile(value) ||
- *   (typeof CustomFile !== 'undefined' && value instanceof CustomFile)
+ *   (typeof CustomFile !== 'undefined' && value instanceof CustomFile);
  * ```
  */
 
@@ -49,8 +52,10 @@ export { isExtractableFile } from './isExtractableFile.mjs'
  */
 
 /**
- * A React Native [`File`](https://developer.mozilla.org/docs/web/api/file)
- * substitute for when using [`FormData`](https://developer.mozilla.org/docs/web/api/formdata).
+ * A [React Native](https://reactnative.dev)
+ * [`File`](https://developer.mozilla.org/en-US/docs/Web/API/File)
+ * substitute for when using
+ * [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData).
  * @kind typedef
  * @name ReactNativeFileSubstitute
  * @type {object}
@@ -60,10 +65,10 @@ export { isExtractableFile } from './isExtractableFile.mjs'
  * @prop {string} [type] File content type.
  * @example <caption>A camera roll file.</caption>
  * ```js
- * {
+ * const fileSubstitute = {
  *   uri: uriFromCameraRoll,
  *   name: 'a.jpg',
- *   type: 'image/jpeg'
- * }
+ *   type: 'image/jpeg',
+ * };
  * ```
  */
