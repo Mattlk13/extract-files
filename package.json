@@ -42,7 +42,7 @@
   "devDependencies": {
     "@types/node": "^18.7.13",
     "coverage-node": "^8.0.0",
-    "esbuild": "^0.15.5",
+    "esbuild": "^0.25.0",
     "eslint": "^8.23.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "gzip-size": "^7.0.0",
